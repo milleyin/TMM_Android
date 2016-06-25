@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- From: file:/D:/androidstudio/studio_workspace/MyApplication/TMM_User_App/src/main/res/values-en/tb_munion_strings.xml -->
+    <eat-comment/>
+    <color name="tb_munion_item_force">#e3e3e3</color>
+    <!-- From: file:/D:/androidstudio/studio_workspace/MyApplication/TMM_User_App/src/main/res/values-en/umeng_update_string.xml -->
+    <eat-comment/>
+    <string name="UMAppUpdate">App updating</string>
+    <string name="UMBreak_Network">Please make sure you are connected to internet,update failed</string>
+    <string name="UMDialog_InstallAPK">The lastest version has been downloaded, install now ?</string>
+    <string name="UMGprsCondition">(Warning: Not WIFI Condition)</string>
+    <string name="UMIgnore">Ingore this</string>
+    <string name="UMNewVersion">Latest version: </string>
+    <string name="UMNotNow">Not now</string>
+    <string name="UMTargetSize">Target size: </string>
+    <string name="UMToast_IsUpdating">Updating....</string>
+    <string name="UMUpdateCheck">2.6.0.1.20150312</string>
+    <string name="UMUpdateContent">Update Content</string>
+    <string name="UMUpdateNow">Update now</string>
+    <string name="UMUpdateSize">Update size: </string>
+    <string name="UMUpdateTitle">New version found</string>
+    <!-- From: file:/D:/androidstudio/studio_workspace/MyApplication/TMM_User_App/src/main/res/values-en/strings.xml -->
+    <eat-comment/>
+    <string name="action_settings">Settings</string>
+    <string name="app_id">563c5628</string>
+    <string name="app_name">田觅觅</string>
+    <string name="camerabroadcast">摄像头播报</string>
+    <string name="close">关闭</string>
+    <string name="day">白天</string>
+    <string name="daynightmode">"昼夜模式    "</string>
+    <string name="deviationrecalculation">"偏航重算    "</string>
+    <string name="intell_bd_title">智能播报</string>
+    <string name="jamrecalculation">"拥堵重算    "</string>
+    <string name="mapTitle">导航</string>
+    <string name="mixian">觅鲜</string>
+    <string name="night">夜间</string>
+    <string name="no">"  否  "</string>
+    <string name="open">打开</string>
+    <string name="preference_default_tts_pitch">50</string>
+    <string name="preference_default_tts_role">xiaoyan</string>
+    <string name="preference_default_tts_speed">50</string>
+    <string name="preference_default_tts_volume">50</string>
+    <string name="preference_dialog_title_tts_speed">选择语速</string>
+    <string name="preference_dialog_title_tts_volume">选择音量</string>
+    <string name="preference_key_tts_pitch">tts_pitch</string>
+    <string name="preference_key_tts_speed">tts_speed</string>
+    <string name="preference_key_tts_volume">tts_volume</string>
+    <string name="preference_title_tts_pitch">语调</string>
+    <string name="preference_title_tts_speed">语速</string>
+    <string name="preference_title_tts_volume">音量</string>
+    <string name="routeinfo">全程   --公里/--分钟    收费 --元</string>
+    <string name="routeinfo_1">全程 </string>
+    <string name="routeinfo_2">公里/</string>
+    <string name="routeinfo_3">"分钟    "</string>
+    <string name="routeinfo_4">元</string>
+    <string name="routeinfo_default">--</string>
+    <string name="routeshow">线路展示</string>
+    <string name="screenon">"屏幕常亮    "</string>
+    <string name="setting">设置</string>
+    <string name="share">share</string>
+    <string name="soft_update_cancel">取消</string>
+    <string name="soft_update_info">检测到新版本，立即更新吗</string>
+    <string name="soft_update_later">稍后更新</string>
+    <string name="soft_update_no">已经是最新版本</string>
+    <string name="soft_update_title">软件更新</string>
+    <string name="soft_update_updatebtn">更新</string>
+    <string name="soft_updating">正在更新</string>
+    <!-- From: file:/D:/androidstudio/studio_workspace/MyApplication/TMM_User_App/src/main/res/values-en/ssdk_strings.xml -->
+    <eat-comment/>
+    <string name="ssdk_alipay">Alipay</string>
+    <string name="ssdk_alipay_client_inavailable">Alipay client not exists or the version is too low</string>
+    <string name="ssdk_baidutieba">百度贴吧</string>
+    <string name="ssdk_baidutieba_client_inavailable">目前您的百度贴吧版本过低或未安装，需要安装百度贴吧才能使用</string>
+    <string name="ssdk_bluetooth">Bluetooth</string>
+    <string name="ssdk_douban">Douban</string>
+    <string name="ssdk_dropbox">Dropbox</string>
+    <string name="ssdk_email">Email</string>
+    <string name="ssdk_evernote">Evernote</string>
+    <string name="ssdk_facebook">Facebook</string>
+    <string name="ssdk_facebookmessenger">Facebook Messenger</string>
+    <string name="ssdk_flickr">Flickr</string>
+    <string name="ssdk_foursquare">FourSquare</string>
+    <string name="ssdk_google_plus_client_inavailable">Google+ client not exists or the version is too low</string>
+    <string name="ssdk_googleplus">Google+</string>
+    <string name="ssdk_instagram">Instagram</string>
+    <string name="ssdk_instagram_client_inavailable">Instagram client not exists or the version is too low</string>
+    <string name="ssdk_instapager_email_or_password_incorrect">Email or Password incorrect</string>
+    <!-- From: file:/D:/androidstudio/studio_workspace/MyApplication/TMM_User_App/src/main/res/values-en/ssdk_instapaper_strings.xml -->
+    <eat-comment/>
+    <string formatted="false" name="ssdk_instapager_login_html"><![CDATA[
+<!DOCTYPE html>
+<html>
+<head>
+<meta content=\"text/html; charset=utf-8\" http-equiv=\"Content-Type\">
+<meta content=\"width=device-width,minimum-scale=1,maximum-scale=1,initial-scale=1,user-scalable=no\" id=\"viewport\" name=\"viewport\">
+<meta content=\"yes\" name=\"apple-mobile-web-app-capable\">
+<title>%s</title>
+<style type=\"text/css\">
+body{margin:0;padding:0}
+.inputstyle {
+    -webkit-tap-highlight-color:rgba(255,255,255,0);
+    width:100%%;
+    height:44px;
+    color:#000;
+    background:0;
+    border:0;
+    font-size:16px;
+    outline: none;
+    -webkit-appearance:none
+}
+
+.btn {
+    width:90%%;
+    height:44px;
+    line-height:44px;
+    background:#A0C035;
+    border:0;
+    border-radius:4px;
+    color:#fff;
+    font-size:16px;
+    text-align:center;
+    margin-top:15px;
+    display:block
+}
+.btn:disabled {
+    background: #dddddd;
+}
+.error {
+    color:red;
+}
+</style>
+</head>
+
+<body>
+<script type=\"text/javascript\">
+function login(form){
+    var u=form[\"u\"].value,p=form[\"p\"].value;
+    if(!u || !p)
+        return false;
+    form[\"s\"].disabled = true;
+    return true;
+}
+</script>
+<form style=\"margin-top:45px;\" action=\"%s\" metho=\"get\" onsubmit=\"return login(this);\">
+%s
+<div style=\"padding-left:15px;border-top:1px solid #E3E3E5;border-bottom:1px solid #E3E3E5;\">
+ <input type=\"hidden\" name=\"ID_SIGN\" value=\"OWELJSFPWECSFEW\"/>
+ <input class=\"inputstyle\" id=\"u\" name=\"u\" type=\"text\" value=\"%s\" placeholder=\"%s\" style=\"border-bottom:1px solid #E3E3E5;\"/>
+ <input class=\"inputstyle\" id=\"p\" name=\"p\" type=\"password\" placeholder=\"%s\"/>
+</div>
+<p><input style=\"margin:0 auto;\" type=\"submit\" name=\"s\" value=\"  %s  \" class=\"btn\"/></p>
+</form>
+</body>
+</html>
+]]></string>
+    <!-- From: file:/D:/androidstudio/studio_workspace/MyApplication/TMM_User_App/src/main/res/values-en/ssdk_strings.xml -->
+    <eat-comment/>
+    <string name="ssdk_instapaper">Instapaper</string>
+    <string name="ssdk_instapaper_email">Email</string>
+    <string name="ssdk_instapaper_login">Sign In</string>
+    <string name="ssdk_instapaper_logining">Sign In…</string>
+    <string name="ssdk_instapaper_pwd">Password</string>
+    <string name="ssdk_kaixin">Kaixin</string>
+    <string name="ssdk_kakaostory">KakaoStory</string>
+    <string name="ssdk_kakaostory_client_inavailable">KakaoStory client not exists or the version is too low</string>
+    <string name="ssdk_kakaotalk">KakaoTalk</string>
+    <string name="ssdk_kakaotalk_client_inavailable">KakaoTalk client not exists or the version is too low</string>
+    <string name="ssdk_laiwang">Laiwang</string>
+    <string name="ssdk_laiwang_client_inavailable">Laiwangs client not exists or the version is too low</string>
+    <string name="ssdk_laiwangmoments">Laiwang Moments</string>
+    <string name="ssdk_line">Line</string>
+    <string name="ssdk_line_client_inavailable">Line client not exists or the version is too low</string>
+    <string name="ssdk_linkedin">Linked in</string>
+    <string name="ssdk_mingdao">Mingdao</string>
+    <string name="ssdk_mingdao_share_content">Share webpage</string>
+    <string name="ssdk_neteasemicroblog">Netease Microblog</string>
+    <!-- From: file:/D:/androidstudio/studio_workspace/MyApplication/TMM_User_App/src/main/res/values-en/ssdk_oks_strings.xml -->
+    <eat-comment/>
+    <string name="ssdk_oks_cancel">Cancel</string>
+    <string name="ssdk_oks_finish">Finish</string>
+    <string name="ssdk_oks_list_friends">Friends on %s</string>
+    <string name="ssdk_oks_multi_share">Photo Sharing</string>
+    <string name="ssdk_oks_pull_to_refresh">Pull down to refresh</string>
+    <string name="ssdk_oks_refreshing">Refreshing…</string>
+    <string name="ssdk_oks_release_to_refresh">Release to refresh</string>
+    <string name="ssdk_oks_select_a_friend">Please select a friend</string>
+    <string name="ssdk_oks_select_one_plat_at_least">Please select a target platform</string>
+    <string name="ssdk_oks_shake2share">Shake your phone!</string>
+    <string name="ssdk_oks_share">Share</string>
+    <string name="ssdk_oks_share_canceled">Operation canceled</string>
+    <string name="ssdk_oks_share_completed">Operation succeeded</string>
+    <string name="ssdk_oks_share_failed">Operation failed</string>
+    <string name="ssdk_oks_share_to">Share to </string>
+    <string name="ssdk_oks_sharing">Sharing operation is working in the background…</string>
+    <!-- From: file:/D:/androidstudio/studio_workspace/MyApplication/TMM_User_App/src/main/res/values-en/ssdk_strings.xml -->
+    <eat-comment/>
+    <string name="ssdk_pinterest">Pinterest</string>
+    <string name="ssdk_pinterest_client_inavailable">Pinterest client not exists or the version is too low</string>
+    <string name="ssdk_pocket">Pocket</string>
+    <string name="ssdk_qq">QQ</string>
+    <string name="ssdk_qq_client_inavailable">Mobile QQ client not exists or the version is too low</string>
+    <string name="ssdk_qzone">QZone</string>
+    <string name="ssdk_renren">Renren</string>
+    <string name="ssdk_share_to_baidutieba">分享到百度贴吧</string>
+    <string name="ssdk_share_to_mingdao">Share To Mingdao</string>
+    <string name="ssdk_share_to_qq">Share To QQ</string>
+    <string name="ssdk_share_to_qzone">Share To QZone</string>
+    <string name="ssdk_share_to_qzone_default">Shared from %s</string>
+    <string name="ssdk_shortmessage">Short Message</string>
+    <string name="ssdk_sinaweibo">Sina Weibo</string>
+    <string name="ssdk_sohumicroblog">Sohu Microblog</string>
+    <string name="ssdk_sohusuishenkan">Sohu Suishenkan</string>
+    <string name="ssdk_tencentweibo">Tencent Weibo</string>
+    <string name="ssdk_tumblr">Tumblr</string>
+    <string name="ssdk_twitter">Twitter</string>
+    <string name="ssdk_use_login_button">use login button instead</string>
+    <string name="ssdk_vkontakte">VK</string>
+    <string name="ssdk_website">http://www.mob.com</string>
+    <string name="ssdk_wechat">WeChat</string>
+    <string name="ssdk_wechat_client_inavailable">Wechat client not exists or the version is too low</string>
+    <string name="ssdk_wechatfavorite">WeChat Favorite</string>
+    <string name="ssdk_wechatmoments">WeChat Moments</string>
+    <string name="ssdk_weibo_oauth_regiseter">Authorization</string>
+    <string name="ssdk_weibo_upload_content">分享图片</string>
+    <string name="ssdk_whatsapp">WhatsApp</string>
+    <string name="ssdk_whatsapp_client_inavailable">WhatsApp client not exists or the version is too low</string>
+    <string name="ssdk_yixin">Yixin</string>
+    <string name="ssdk_yixin_client_inavailable">Yixin client not exists or the version is too low</string>
+    <string name="ssdk_yixinmoments">Yixin Moments</string>
+    <string name="ssdk_youdao">Youdao</string>
+    <!-- From: file:/D:/androidstudio/studio_workspace/MyApplication/TMM_User_App/src/main/res/values-en/strings.xml -->
+    <eat-comment/>
+    <string name="start_navi_navi">实时导航</string>
+    <string name="starttapmap">我的位置（可点击地图设置）</string>
+    <string name="tapmap">点击地图设置</string>
+    <!-- From: file:/D:/androidstudio/studio_workspace/MyApplication/TMM_User_App/src/main/res/values-en/tb_munion_strings.xml -->
+    <eat-comment/>
+    <string name="tb_munion_tip_download_prefix">正在下载:</string>
+    <!-- From: file:/D:/androidstudio/studio_workspace/MyApplication/TMM_User_App/src/main/res/values-en/strings.xml -->
+    <eat-comment/>
+    <string name="theme_blue">经典蓝</string>
+    <string name="theme_pink">可爱粉</string>
+    <string name="theme_white">简约白</string>
+    <string name="trafficbroadcast">"交通播报    "</string>
+    <!-- From: file:/D:/androidstudio/studio_workspace/MyApplication/TMM_User_App/src/main/res/values-en/umeng_common_strings.xml -->
+    <eat-comment/>
+    <string name="umeng_common_action_cancel">Cancel</string>
+    <string name="umeng_common_action_continue">Continue</string>
+    <string name="umeng_common_action_info_exist">The app is already in downloading list.</string>
+    <string name="umeng_common_action_pause">Pause</string>
+    <string name="umeng_common_download_failed">Download Failed! </string>
+    <string name="umeng_common_download_finish">Download finished,click to install it.</string>
+    <string name="umeng_common_download_notification_prefix">Downloading: </string>
+    <string name="umeng_common_icon">icon</string>
+    <string name="umeng_common_info_interrupt">dowload interrupted.</string>
+    <string name="umeng_common_network_break_alert">Please make sure you are connected to internet, download failed</string>
+    <string name="umeng_common_patch_finish">Patch finished,click to install it.</string>
+    <string name="umeng_common_pause_notification_prefix">Pause: </string>
+    <string name="umeng_common_silent_download_finish">New version is ready,click to install it.</string>
+    <string name="umeng_common_start_download_notification">Download start.</string>
+    <string name="umeng_common_start_patch_notification">Patch start.</string>
+    <!-- From: file:/D:/androidstudio/studio_workspace/MyApplication/TMM_User_App/src/main/res/values-en/strings.xml -->
+    <eat-comment/>
+    <string name="walkdescription">步行状态不可用</string>
+    <string name="yes">"  是  "</string>
+</resources>

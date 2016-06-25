@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android" >
+    <item android:state_checked="true" android:drawable="@mipmap/input_choose" />
+    <item android:state_checked="false" android:drawable="@mipmap/input_notchoose" />
+    <item android:drawable="@mipmap/input_notchoose"/>
+
+</selector>
+<!-- From: file:/D:/androidstudio/studio_workspace/MyApplication/TMM_Store_App/src/main/res/drawable/input_choose_selector.xml -->

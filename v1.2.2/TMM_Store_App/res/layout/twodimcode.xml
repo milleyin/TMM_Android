@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             android:layout_width="fill_parent"
+             android:layout_height="fill_parent">
+
+  <SurfaceView android:id="@+id/preview_view"
+               android:layout_width="fill_parent"
+               android:layout_gravity="center"
+               android:layout_height="fill_parent"
+               />
+  
+   <com.qljl.tmm_business.view.ViewfinderView
+      android:id="@+id/viewfinder_view"
+      android:layout_width="fill_parent"
+      android:layout_height="fill_parent"
+      
+      android:background="@color/transparent"/>
+   
+    <include  android:id="@+id/two_dim_title" layout= "@layout/title_ceter_imageview"/>
+
+		
+		<FrameLayout
+		    android:layout_width="match_parent"
+		    android:layout_height="match_parent"
+		    android:background="@color/transparent"
+		     >
+       <LinearLayout 
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:layout_gravity="bottom"
+           android:orientation="horizontal"
+           android:padding="@dimen/common_measure_50dp"
+           >
+          
+<!--        <LinearLayout -->
+<!--            android:layout_width="0dp" -->
+<!--            android:layout_weight="1" -->
+<!--            android:layout_height="wrap_content" -->
+<!--            android:gravity="center" -->
+<!--             > -->
+<!--        <ImageView -->
+<!--            android:id="@+id/scanImg" -->
+<!--            android:layout_width="wrap_content" -->
+<!--            android:layout_height="wrap_content" -->
+<!--            android:src="@drawable/scan_choose" -->
+<!--             /> -->
+<!--        </LinearLayout> -->
+<!--        <LinearLayout -->
+<!--            android:layout_width="0dp" -->
+<!--            android:layout_weight="1" -->
+<!--            android:layout_height="wrap_content" -->
+<!--            android:gravity="center" -->
+<!--             > -->
+<!--         <ImageView -->
+<!--            android:id="@+id/inputImg" -->
+<!--            android:layout_width="wrap_content" -->
+<!--            android:layout_height="wrap_content" -->
+<!--            android:src="@drawable/input_choose" -->
+<!--             /> -->
+<!--         </LinearLayout> -->
+
+		
+		 <RadioGroup  
+        android:gravity="center"  
+        android:orientation="horizontal"    
+        android:layout_width="fill_parent"     
+        android:layout_height="wrap_content" 
+        >  
+        <RadioButton     
+            android:id="@+id/scanRb"    
+            android:layout_width="wrap_content"     
+            android:layout_height="wrap_content"  
+            android:textColor="@android:color/black"    
+            android:gravity="center"   
+            android:button="@null" 
+            android:checked="true" 
+            android:background="@drawable/scan_choose_selector"  
+            android:layout_marginRight="@dimen/common_measure_60dp"            />  
+        <RadioButton     
+            android:id="@+id/inputRB"  
+            android:layout_width="wrap_content"     
+            android:layout_height="wrap_content"  
+            android:textColor="@android:color/black"    
+            android:gravity="center"  
+            android:button="@null"  
+            android:background="@drawable/input_choose_selector" 
+            android:layout_marginLeft="@dimen/common_measure_60dp" 
+            /> 
+            </RadioGroup>
+            
+		</LinearLayout>
+	</FrameLayout>
+</FrameLayout>

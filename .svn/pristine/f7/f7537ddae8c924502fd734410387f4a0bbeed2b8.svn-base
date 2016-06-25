@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<translate
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:fromXDelta="-100%p"
+    android:toXDelta="100%p"
+    android:fromYDelta="0%p"
+    android:toYDelta="0"
+    android:duration="5000">
+    
+</translate>
+<!-- From: file:/D:/androidstudio/studio_workspace/MyApplication/TMM_User_App/src/main/res/anim/translate_anim.xml -->

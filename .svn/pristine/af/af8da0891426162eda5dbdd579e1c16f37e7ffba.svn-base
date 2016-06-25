@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="57dp"
+    android:orientation="vertical"
+    android:background="@drawable/dot" >
+
+    <TextView
+        android:id="@+id/addressInfo"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="TextView"
+        android:gravity="center"
+        android:paddingTop="6dp" />
+
+</RelativeLayout>
+<!-- From: file:/D:/androidstudio/studio_workspace/MyApplication/TMM_User_App/src/main/res/layout/info_window.xml -->

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_pressed="true" android:drawable="@mipmap/butten_pressed" />
+    <item android:drawable="@mipmap/butten_unpress" />
+</selector><!-- From: file:/D:/androidstudio/studio_workspace/MyApplication/TMM_Store_App/src/main/res/drawable/whats_new_start_btn.xml -->

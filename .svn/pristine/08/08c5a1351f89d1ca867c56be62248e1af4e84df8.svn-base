@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent">
+	<FrameLayout
+		android:layout_width="match_parent"
+		android:layout_height="match_parent">
+		<WebView
+			android:id="@+id/webView"
+			android:layout_width="match_parent"
+			android:layout_height="match_parent" />
+		<ProgressBar
+			android:id="@+id/progressBar"
+			style="?android:attr/progressBarStyleLarge"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_gravity="center"
+			android:visibility="gone" />
+	</FrameLayout>
+	<FrameLayout
+		android:id="@+id/otherLinear"
+		android:layout_width="match_parent"
+		android:layout_height="800dp"
+		android:visibility="gone">
+		<LinearLayout
+			android:layout_width="match_parent"
+			android:layout_height="match_parent"
+			android:orientation="vertical">
+			<FrameLayout
+				android:id="@+id/frameTitle"
+				android:layout_width="match_parent"
+				android:layout_height="@dimen/common_measure_70dp"
+				android:background="#FFFFFF">
+				<LinearLayout
+					android:layout_width="match_parent"
+					android:layout_height="@dimen/common_measure_70dp"
+					android:orientation="horizontal">
+					<ImageView
+						android:id="@+id/backImg"
+						android:layout_width="@dimen/common_measure_60dp"
+						android:layout_height="match_parent"
+						android:src="@mipmap/back"
+						android:padding="@dimen/common_measure_8dp"
+						android:visibility="gone"
+						android:layout_marginLeft="@dimen/common_measure_12dp" />
+				</LinearLayout>
+				<TextView
+					android:id="@+id/mixianTitle"
+					android:layout_width="match_parent"
+					android:layout_height="match_parent"
+					android:text="@string/mixian"
+					android:textSize="19sp"
+					android:gravity="center" />
+			</FrameLayout>
+			<!-- <WebView -->
+			<!-- android:id="@+id/otherWebView" -->
+			<!-- android:layout_width="match_parent" -->
+			<!-- android:layout_height="match_parent" -->
+			<!-- > -->
+<!-- 			</WebView> -->
+			<WebView
+				android:id="@+id/otherWebView"
+				android:layout_width="fill_parent"
+				android:layout_height="match_parent"
+				 />
+		</LinearLayout>
+	</FrameLayout>
+
+	<FrameLayout
+		android:id="@+id/otherLinear2"
+		android:layout_width="match_parent"
+		android:layout_height="800dp"
+		android:visibility="gone">
+		<LinearLayout
+			android:layout_width="match_parent"
+			android:layout_height="match_parent"
+			android:orientation="vertical">
+			<FrameLayout
+				android:id="@+id/frameTitle2"
+				android:layout_width="match_parent"
+				android:layout_height="@dimen/common_measure_70dp"
+				android:background="#FFFFFF">
+				<LinearLayout
+					android:layout_width="match_parent"
+					android:layout_height="@dimen/common_measure_70dp"
+					android:orientation="horizontal">
+					<ImageView
+						android:id="@+id/backImg2"
+						android:layout_width="@dimen/common_measure_60dp"
+						android:layout_height="match_parent"
+						android:src="@mipmap/back"
+						android:padding="@dimen/common_measure_8dp"
+						android:visibility="gone"
+						android:layout_marginLeft="@dimen/common_measure_12dp" />
+				</LinearLayout>
+				<TextView
+					android:id="@+id/mixianTitle2"
+					android:layout_width="match_parent"
+					android:layout_height="match_parent"
+					android:text="@string/mixian"
+					android:textSize="19sp"
+					android:gravity="center" />
+				
+				<ImageView 
+				    android:id="@+id/shareImg"
+				    android:layout_width="@dimen/common_measure_55dp"
+				    android:layout_height="@dimen/common_measure_65dp"
+				    android:layout_gravity="right"
+				    android:src="@mipmap/share_icon"
+				    android:paddingRight="10dp"
+				    />
+			</FrameLayout>
+			<WebView
+				android:id="@+id/otherWebView2"
+				android:layout_width="match_parent"
+				android:layout_height="match_parent">
+			</WebView>
+		</LinearLayout>
+	</FrameLayout>
+
+</FrameLayout>
+
+<!-- From: file:/D:/androidstudio/studio_workspace/MyApplication/TMM_User_App/src/main/res/layout/webview.xml -->

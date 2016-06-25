@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<scale xmlns:android="http://schemas.android.com/apk/res/android"  
+        android:interpolator="@android:anim/accelerate_decelerate_interpolator"
+ 	android:duration="5000"
+	android:fromXDelta="100%p"
+	android:toXDelta="0"/>
+<!-- From: file:/D:/androidstudio/studio_workspace/MyApplication/TMM_User_App/src/main/res/anim/left_in.xml -->
