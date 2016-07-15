@@ -77,9 +77,9 @@ public class HorizontalScrollViewAdapter
 		task.width = DPHelper.px2dip(context, width);
 		task.height = DPHelper.px2dip(context, height);
 		//开始加载图片显示的
-		task.startDrawId = R.mipmap.default_img;
+		task.startDrawId = R.mipmap.ic_launcher;
 		//图片加载失败显示的照片
-		task.errorDrawId = R.mipmap.default_img;
+		task.errorDrawId = R.mipmap.ic_launcher;
 		viewHolder.imgView.setImageParams(task);
 		viewHolder.imgView.setLayoutParams(lp);
 		return convertView;

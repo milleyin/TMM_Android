@@ -1,17 +1,25 @@
 package com.qljl.tmmdp;
 
 import android.app.Activity;
+import android.content.ComponentName;
 import android.content.Context;
+import android.content.Intent;
+import android.content.ServiceConnection;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.media.MediaPlayer;
 import android.net.http.SslError;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
+import android.os.IBinder;
 import android.os.Message;
+import android.os.RemoteException;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.webkit.JavascriptInterface;
@@ -27,13 +35,17 @@ import android.widget.Toast;
 import com.qljl.tmmdp.adapter.HorizontalScrollViewAdapter;
 import com.qljl.tmmdp.entity.VersionMessage;
 import com.qljl.tmmdp.modle.imageloader.TaskQueue;
+import com.qljl.tmmdp.reciver.IMyAidlInterface;
 import com.qljl.tmmdp.service.downloader.DownloadProgressListener;
 import com.qljl.tmmdp.service.downloader.FileDownloader;
-import com.qljl.tmmdp.upgrade.UpdateManager;
+import com.qljl.tmmdp.upgrade.SilenceUpdate;
+import com.qljl.tmmdp.util.LogcatHelper;
 import com.qljl.tmmdp.video.FileUtils;
 import com.qljl.tmmdp.video.VideoHttp;
 import com.qljl.tmmdp.view.FullScreenVideoView;
 import com.qljl.tmmdp.view.MyHorizontalScrollView;
+import com.umeng.message.IUmengRegisterCallback;
+import com.umeng.message.PushAgent;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -46,13 +58,13 @@ import java.util.TimerTask;
  * 入口
  */
 public class MainActivity extends Activity {
-    final String TAG = "lw  dp";
+    final String TAG = " dp     MainActivity";
     private Context context;
     WebView contentWeb; //web容器
     FullScreenVideoView videoView;    //视频播放器
     ProgressBar progressBar;    //进度条
     MyHorizontalScrollView horizontalScrollView;    //横向滚动
-    UpdateManager updateManager;    //版本升级
+    SilenceUpdate silenceUpdate;    //版本升级
     final int HAVE_UPDATE = 1;  //有更新
     final int PROCESSING = 2;   //下载ing
     final int FAILURE = 3;  //下载失败
@@ -64,8 +76,15 @@ public class MainActivity extends Activity {
     final int UPDATE_TIME = 9;  //更新
     final int HIDE_IMGS = 10;   //隐藏图片
     final int HIDE_VEDIO = 11;  //隐藏视频
-    final int HIDE_VIEW = 12;   //隐藏视频
+    final int HIDE_VIEW = 12;   //隐藏导航栏
+    final int HAVE_SERVICE_APK_UPDATE = 13; //升级服务apk
+    final int NOTHAVE_SERVICE_APK_UPDATE = 14;//没有升级
     int totalSize = 0;
+
+    boolean isTest = false;  //是否是测试服
+    String ApkUrl = ""; //apk更新地址
+    String ServiceApkUrl = "";  //服务apk更新地址
+    String homeUrl = "";//主页地址
 
     FileUtils fileUtils;
     VideoHttp videoHttp;
@@ -74,23 +93,32 @@ public class MainActivity extends Activity {
     String fileName = "";
 
     private long timeout = 10000;    //超时
-    private Timer timer;
+    private Timer timer = null;
 
     private float width, height, marginTop, marginLeft;    //视频宽高处理
     private String playUrl;
+    android.widget.MediaController mc = null;
     private List<String> imgList;   //图片列表
     private HorizontalScrollViewAdapter adapter;    //图片填充器
     private float imgWidth, imgHeight, imgMarginTop, imgMarginLeft, imgMarginRight, imgMarginBottom;
     String strs;
+
+    IMyAidlInterface aidlInterface = null;
+    int reciverApkVersion = 0;
+    MySeiviceConnection connection = null;
+    boolean isConnection = false;   //是否连接的aidl
+    VersionMessage serviceVersionMessage = null;
     View decorView;
+    boolean first_load = true;
 
     android.os.Handler handler = new android.os.Handler() {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
             switch (msg.what) {
-                case HAVE_UPDATE:
-                    updateManager.showNoticeDialog();
+                case HAVE_UPDATE://apk有更新
+                    print("apk有更新！");
+                    silenceUpdate.downloadApk(aidlInterface);
                     break;
                 case PROCESSING:// 下载时
                     int size = msg.getData().getInt("size");// 从消息中获取已经下载的数据长度
@@ -107,6 +135,9 @@ public class MainActivity extends Activity {
                 case GET_VIDEOMESSAGEED:
                     print("videomessage:" + versionMessage);
                     checkVideo();
+                    break;
+                case TIMEOUT://超时
+                    Toast.makeText(context,"请检查你的网络",Toast.LENGTH_SHORT).show();
                     break;
                 case SET_VIDEO:
                     videoView.setVisibility(View.VISIBLE);
@@ -134,7 +165,8 @@ public class MainActivity extends Activity {
                     initHorizontalScrollView();
                     break;
                 case UPDATE_TIME://凌晨更新
-                    contentWeb.loadUrl("http://pad.365tmm.net/front");
+                    contentWeb.loadUrl(homeUrl);
+                    checkVersion();
                     break;
                 case HIDE_IMGS://隐藏图片
                     horizontalScrollView.setVisibility(View.GONE);
@@ -147,15 +179,14 @@ public class MainActivity extends Activity {
                     }
                     break;
                 case HIDE_VIEW://隐藏导航栏
-                    /*int i = decorView.getSystemUiVisibility();
-                    if (i == View.SYSTEM_UI_FLAG_VISIBLE) {
-                        int uiOption = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                                | View.SYSTEM_UI_FLAG_FULLSCREEN
-                                | View.SYSTEM_UI_FLAG_IMMERSIVE
-                                | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
-                        decorView.setSystemUiVisibility(uiOption);
-                    }*/
                     break;
+                case HAVE_SERVICE_APK_UPDATE://升级服务apk有更新
+                    silenceUpdate.downloadServiceApk(serviceVersionMessage.getUrl());
+                    break;
+                case NOTHAVE_SERVICE_APK_UPDATE://升级服务apk没有更新或信息有误
+                    checkVersion();
+                    break;
+
             }
         }
     };
@@ -170,17 +201,39 @@ public class MainActivity extends Activity {
                 | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
         decorView.setSystemUiVisibility(uiOptions);
         setContentView(R.layout.activity_main);
+        /* 是否是由服务apk启动此apk */
+        Bundle bundle = this.getIntent().getExtras();
+        if(bundle!=null && bundle.getString("from")!=null){
+            print("onCreate:"+bundle.getString("from"));
+        }
         context = MainActivity.this;
+        initView();
+        initData();
         fileUtils = new FileUtils(context);
         videoHttp = new VideoHttp(context);
-        updateManager = new UpdateManager(context);
-       // LogcatHelper.getInstance(this).start();
-        initView();
-        checkVersion();
+        silenceUpdate = new SilenceUpdate(context);
+        /* 日志保存在sd卡 */
+      //  LogcatHelper.getInstance(this).start();
+        /* 检测服务apk */
+        checkServiceApk();
         timing();
         // startVideoCheck();
-        // playVideo("http://pad.365tmm.net/uploads/ad/video/2016-06-15/69116457612c844081f2.31369748.mp4");
-        // setVideo(494,278,48,30,"http://pad.365tmm.net/uploads/ad/video/2016-06-15/69116457612c844081f2.31369748.mp4");
+        /* 开启推送 */
+        PushAgent mPushAgent = PushAgent.getInstance(context);
+        mPushAgent.enable(new IUmengRegisterCallback() {
+
+            @Override
+            public void onRegistered(final String registrationId) {
+                new Handler().post(new Runnable() {
+                    @Override
+                    public void run() {
+                        //onRegistered方法的参数registrationId即是device_token
+                        Log.d("lwww device_token", registrationId);
+                    }
+                });
+            }
+        });
+        PushAgent.getInstance(context).onAppStart();
     }
 
     /**
@@ -193,10 +246,12 @@ public class MainActivity extends Activity {
         contentWeb.getSettings().setJavaScriptEnabled(true);
         contentWeb.addJavascriptInterface(getHtmlObject(), "jsObj");
         videoView = (FullScreenVideoView) findViewById(R.id.videoView);
-        // videoView.setVisibility(View.GONE);
-        contentWeb.loadUrl("https://pad.365tmm.com/front");
-        //  contentWeb.loadUrl("http://pad.365tmm.net/front");
-      //  contentWeb.loadUrl("http://192.168.0.215:8888/");
+        /* 配置web容器 */
+        if(Build.VERSION.SDK_INT >= 19) {//WebView先不要自动加载图片，等页面finish后再发起图片加载
+            contentWeb.getSettings().setLoadsImagesAutomatically(true);
+        } else {
+            contentWeb.getSettings().setLoadsImagesAutomatically(false);
+        }
         contentWeb.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
         contentWeb.getSettings().setPluginState(WebSettings.PluginState.ON);
         contentWeb.getSettings().setAllowFileAccess(true);
@@ -204,10 +259,17 @@ public class MainActivity extends Activity {
         contentWeb.getSettings().setBuiltInZoomControls(true);
         contentWeb.getSettings().setDisplayZoomControls(false);
         contentWeb.getSettings().setSupportZoom(true);
-
         contentWeb.getSettings().setDomStorageEnabled(true);
         contentWeb.getSettings().setDatabaseEnabled(true);
-
+        String databasePath = contentWeb.getContext().getDir("databases", Context.MODE_PRIVATE).getPath();
+        contentWeb.getSettings().setDatabasePath(databasePath);
+        /* 缓存 */
+        contentWeb.getSettings().setAppCacheMaxSize(1024 * 1024 * 8);// 设置缓冲大小，我设的是8M
+        String appCacheDir = this.getApplicationContext()
+                .getDir("cache", Context.MODE_PRIVATE).getPath();
+        contentWeb.getSettings().setAppCachePath(appCacheDir);
+        contentWeb.getSettings().setAllowFileAccess(true);
+        //  contentWeb.getSettings().setCacheMode(WebSettings.LOAD_DEFAULT);
         contentWeb.setWebChromeClient(new WebChromeClient() {
             @Override
             public void onProgressChanged(WebView view, int progress) {
@@ -233,9 +295,7 @@ public class MainActivity extends Activity {
             public void onReceivedError(WebView view, int errorCode,
                                         String description, String failingUrl) {
                 super.onReceivedError(view, errorCode, description, failingUrl);
-//				System.out.println("lw     onReceivedSslError");
                 // 这里进行无网络或错误处理，具体可以根据errorCode的值进行判断，做跟详细的处理。
-                // view.loadData(errorHtml, "text/html", "UTF-8");
                 view.loadUrl("file:///android_asset/notnet.html");
             }
 
@@ -248,31 +308,46 @@ public class MainActivity extends Activity {
             @Override
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
                 super.onPageStarted(view, url, favicon);
-                timer = new Timer();
-                TimerTask tt = new TimerTask() {
-                    @Override
-                    public void run() {
+                if (first_load) {
+                    timer = new Timer();
+                    TimerTask tt = new TimerTask() {
+                        @Override
+                        public void run() {
                         /*
                         * 超时后,首先判断页面加载进度,超时并且进度小于100,就执行超时后的动作
                         */
-                        if (progressBar.getProgress() < 100) {
-                            Message msg = new Message();
-                            msg.what = TIMEOUT;
-                            mHandler.sendMessage(msg);
-                            timer.cancel();
-                            timer.purge();
+                            first_load = false;
+                            if (progressBar.getProgress() < 100) {
+                                Message msg = new Message();
+                                msg.what = TIMEOUT;
+                                mHandler.sendMessage(msg);
+                                timer.cancel();
+                                timer.purge();
+                            }
+                            if (progressBar.getProgress() == 100) {
+                                if (timer != null) {
+                                    timer.cancel();
+                                    timer.purge();
+                                }
+                            }
                         }
-                    }
-                };
-                timer.schedule(tt, timeout, 1);
+                    };
+                    timer.schedule(tt, timeout, 1);
+                }
 
             }
 
             @Override
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
-                timer.cancel();
-                timer.purge();
+                if (timer != null) {
+                    timer.cancel();
+                    timer.purge();
+                }
+                //恢复图片加载
+                if(!contentWeb.getSettings().getLoadsImagesAutomatically()) {
+                    contentWeb.getSettings().setLoadsImagesAutomatically(true);
+                }
             }
         });
         //禁止复制粘贴
@@ -286,7 +361,7 @@ public class MainActivity extends Activity {
         });
 
         handlerWeb.sendEmptyMessageDelayed(AUTO, 1000 * 3);
-
+        /* 隐藏导航栏 */
         videoView.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -303,6 +378,20 @@ public class MainActivity extends Activity {
         });
     }
 
+    private void initData(){
+        if(isTest){//测试服
+            homeUrl ="http://pad.365tmm.net/front";
+           // homeUrl = "http://192.168.0.77:8000/home.html";
+            ApkUrl = "http://test2.365tmm.net/index.php?r=admin/tmm_software/query&pad=pad&apk=apk";
+            ServiceApkUrl = "http://test2.365tmm.net/index.php?r=admin/tmm_software/query&pad=pad&dpr=dpr";
+        }else{//正式服
+            homeUrl ="https://pad.365tmm.com/front";
+            ApkUrl = "http://m.365tmm.com/index.php?r=admin/tmm_software/query&pad=pad&apk=apk";
+            ServiceApkUrl = "http://m.365tmm.com/index.php?r=admin/tmm_software/query&pad=pad&dpr=dpr";
+        }
+        contentWeb.loadUrl(homeUrl);
+    }
+
     /**
      * 图片列表设置
      */
@@ -317,6 +406,7 @@ public class MainActivity extends Activity {
 
     private Runnable TimerRunnable;
     private Handler TimerHandler = new Handler();
+
     // 启动定时器的方法
     public void timing() {
         if (TimerRunnable != null && TimerHandler != null) {
@@ -345,7 +435,7 @@ public class MainActivity extends Activity {
         TimerRunnable = new Runnable() {
             public void run() {
                 if (TimerHandler != null && TimerRunnable != null) {
-                    // 做你自己的事情
+                    // 更新
                     handler.sendEmptyMessage(UPDATE_TIME);
                 }
             }
@@ -435,13 +525,14 @@ public class MainActivity extends Activity {
      * 初始化Video
      */
     private void playVideo(String file) {
-        // print("正在播放：" + file);
         //   File video = new File(file);
         //  if (video.exists()) {//判断我们的video文件是否存在,如果存在就播放
         videoView.setVideoPath(file);// 获取视频文件的绝对路径
         // 设置videoView与mController建立关联ontext
-        android.widget.MediaController mc = new android.widget.MediaController(context);
-        mc.setVisibility(View.GONE);
+        if(mc == null) {
+            mc = new android.widget.MediaController(this);
+            mc.setVisibility(View.GONE);
+        }
         videoView.setMediaController(mc);
         // 让VideoView获取焦点
         videoView.requestFocus();
@@ -476,7 +567,7 @@ public class MainActivity extends Activity {
              */
             @JavascriptInterface
             public void prompt(String str) {
-                Toast.makeText(context,str,Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, str, Toast.LENGTH_SHORT).show();
             }
 
             /**
@@ -487,7 +578,6 @@ public class MainActivity extends Activity {
                 //移除播放视频定时器
                 handlerWeb.removeMessages(AUTO);
             }
-
 
 
             /**
@@ -550,21 +640,9 @@ public class MainActivity extends Activity {
             public void hideNavigationBar(){
                 handler.sendEmptyMessage(HIDE_VIEW);
             }
-
-
         };
         return insertObj;
     }
-
-   /* public void setVideo(float width,float height,float marginTop,float marginLeft,String url){
-        FrameLayout.LayoutParams lp;
-        lp= (FrameLayout.LayoutParams) videoView.getLayoutParams();
-        lp.width = px2dip(context,width);
-        lp.height = px2dip(context,height);
-        lp.setMargins(px2dip(context,marginLeft),px2dip(context,marginTop),0,0);
-        videoView.setLayoutParams(lp);
-        playVideo(url);
-    }*/
 
     /**
      * 版本检查
@@ -574,12 +652,57 @@ public class MainActivity extends Activity {
             @Override
             public void run() {
                 super.run();
-                boolean bool = updateManager.versionUpdate();
+                boolean bool = silenceUpdate.versionUpdate(ApkUrl);
                 if (bool) {
                     handler.sendEmptyMessage(HAVE_UPDATE);
                 }
             }
         }.start();
+    }
+
+    /**
+     * 升级服务apk检查
+     */
+    private void checkServiceApk() {
+        new Thread() {
+            @Override
+            public void run() {
+                super.run();
+                try {
+                    serviceVersionMessage = silenceUpdate.getReciverVersion(ServiceApkUrl);
+                    //检查机器上有没有安装服务apk
+                    if(isAppInstalled(context,"com.qljl.tmmdp.reciver")) {
+                        print("versionReciver:" + serviceVersionMessage.getVersion());
+                        connection = new MySeiviceConnection();
+                        Intent intent = new Intent("com.qljl.tmmdp.reciver.aidl");
+                        bindService(intent, connection, BIND_AUTO_CREATE);
+                    }else{//如果没有安装直接安装
+                        handler.sendEmptyMessage(HAVE_SERVICE_APK_UPDATE);
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }.start();
+    }
+
+    /**
+     * 检查指定apk是否已经安装
+     * @param context       上下文
+     * @param packageName   apk包名
+     * @return
+     */
+    public static boolean isAppInstalled(Context context,String packageName) {
+        PackageManager pm = context.getPackageManager();
+        boolean installed =false;
+        try {
+            pm.getPackageInfo(packageName,PackageManager.GET_ACTIVITIES);
+            installed =true;
+        } catch(PackageManager.NameNotFoundException e) {
+            //捕捉到异常,说明未安装
+            installed =false;
+        }
+        return installed;
     }
 
     // 由于用户的输入事件（点击button，触摸屏幕...）是由主线程负责处理的
@@ -698,19 +821,34 @@ public class MainActivity extends Activity {
         Log.d(TAG, str);
     }
 
-   /* *//*@Override
+    @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if ((keyCode == KeyEvent.KEYCODE_BACK)) {
-            finish();
+           /* if(videoView.isPlaying()){
+                videoView.pause();
+            }
+            if(isConnection){
+                unbindService(connection);
+                isConnection = false;
+            }*/
+          // LogcatHelper.getInstance(context).stop();
+            return false;
         }
+
         return super.onKeyDown(keyCode, event);
     }
-*/
+
     @Override
     protected void onResume() {
         // TODO Auto-generated method stub
         super.onResume();
         TaskQueue.TASK_QUEUE.resumeAllTask(this);
+        int uiOption = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                | View.SYSTEM_UI_FLAG_FULLSCREEN
+                | View.SYSTEM_UI_FLAG_IMMERSIVE
+                | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
+        decorView.setSystemUiVisibility(uiOption);
+
     }
 
     @Override
@@ -718,12 +856,72 @@ public class MainActivity extends Activity {
         // TODO Auto-generated method stub
         super.onPause();
         TaskQueue.TASK_QUEUE.pauseAllTask(this);
+        if(isConnection){
+            unbindService(connection);
+            isConnection = false;
+        }
     }
+
+
 
     @Override
     protected void onDestroy() {
         // TODO Auto-generated method stub
         super.onDestroy();
         TaskQueue.TASK_QUEUE.destroyAllTask(this);
+       // LogcatHelper.getInstance(context).stop();
+        if(timer != null) {
+            timer.cancel();
+            timer.purge();
+        }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if(videoView != null){
+            videoView.stopPlayback();
+        }
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        print("-.-onRestart");
+        Bundle bundle = this.getIntent().getExtras();
+        if(bundle!=null && bundle.getString("from")!=null){
+            print("onRestart:"+bundle.getString("from"));
+            if("fromService".equals(bundle.getString("from"))){
+                print("-.-检测升级");
+                checkVersion();
+            }
+        }
+    }
+
+    private class MySeiviceConnection implements ServiceConnection{
+
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            aidlInterface = IMyAidlInterface.Stub.asInterface(service);
+            if(aidlInterface == null){
+                return;
+            }
+            isConnection = true;
+            try {
+                reciverApkVersion = aidlInterface.haveUpdate();
+                print("服务apkVersion:"+reciverApkVersion);
+                if (reciverApkVersion > 0 && reciverApkVersion < serviceVersionMessage.getVersion()) {//服务apk有升级
+                    handler.sendEmptyMessage(HAVE_SERVICE_APK_UPDATE);
+                } else {
+                    handler.sendEmptyMessage(NOTHAVE_SERVICE_APK_UPDATE);
+                }
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+        }
     }
 }

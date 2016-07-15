@@ -3,6 +3,7 @@ package com.qljl.tmmdp.util;
 import android.content.Context;
 
 /**
+ * 分辨率辅助类
  * Created by luow on 2016/6/16.
  */
 public class DPHelper {

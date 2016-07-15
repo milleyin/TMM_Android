@@ -70,14 +70,13 @@ public class UpdateManager {
 				break;
 			case DOWNLOAD_FINISH:
 				// 安装文件
-				installApk();
-				/*Log.e("lw   ","安装ing");
-				if(PackageUtils.installSilent(mContext, mSavePath + "/" + apk_name) == 1){
-					Log.e("lw  ","安装成功");
-					Toast.makeText(mContext,"安装成功！",Toast.LENGTH_LONG).show();
-				}*/
-				//installSlient(mContext, mSavePath);
-				//ShellUtils.execCommand("su pm install -r filePath",true);
+				//installApk();
+				Log.e("lww   ", "安装ing");
+				Intent i = new Intent("COM.MESSAGE");
+				i.addCategory("receiver");
+				i.putExtra("message", apk_name);
+				mContext.sendOrderedBroadcast(i, "com.tmmdp.receiver");
+				//PackageUtils.installSilent(mContext, mSavePath + "/" + apk_name);
 				break;
 			default:
 				break;
@@ -96,12 +95,13 @@ public class UpdateManager {
 	/**
 	 * 更新
 	 */
-	public boolean versionUpdate() {
+	public boolean versionUpdate(String url) {
+		//String url_first = "http://test2.365tmm.net/index.php?r=admin/tmm_software/query&pad=pad&dpr=dpr";
 		//String url_first = "http://test2.365tmm.net/index.php?r=admin/tmm_software/query&pad=pad&apk=apk";
 		//http://m.365tmm.com/index.php?r=admin/tmm_software/query&pad=pad&apk=apk
-		String url_first = "http://m.365tmm.com/index.php?r=admin/tmm_software/query&pad=pad&apk=apk";
+		/*String url_first = "http://m.365tmm.com/index.php?r=admin/tmm_software/query&pad=pad&apk=apk";*/
 		try {
-			Response response = httpHelper.getRequest(url_first);
+			Response response = httpHelper.getRequest(url);
 				if (null != response) {
 					String jsonStr = response.body().string();
 					if (jsonStr != "" || jsonStr != null) {
@@ -110,7 +110,7 @@ public class UpdateManager {
 						versionMessage.setVersion(resultJson.getInt("version"));
 						versionMessage.setUrl(resultJson.getString("down_url"));
 						int oldVersion = getVersionCode(mContext);
-						System.out.println("lw   oldVersion:"+oldVersion+",updateVersion:"+versionMessage.getVersion());
+						//System.out.println("lw   oldVersion:"+oldVersion+",updateVersion:"+versionMessage.getVersion());
 						if(versionMessage.getVersion()>oldVersion){
 							return true;
 							// 显示提示对话框
@@ -119,25 +119,6 @@ public class UpdateManager {
 					}
 				}
 
-		/*	// 第一步，创建HttpGet对象
-			HttpGet httpGet = new HttpGet(url_first);
-			DefaultHttpClient httpClient = new DefaultHttpClient();
-
-			// 第二步，使用execute方法发送HTTP GET请求，并返回HttpResponse对象
-			HttpResponse httpResponse = httpClient.execute(httpGet);
-			Object resultObj = WebActivity.httpHelper.parseJSONString(3,
-					WebActivity.httpHelper.getResponseResult(httpResponse));
-			int version_apk = getVersionCode(mContext);
-			System.out.println("lw       version_apk当前版本===" + version_apk);
-			if (resultObj != null) {// 如果resultObj不为空则是有版本更新
-				VersionCompareApk vc = (VersionCompareApk) resultObj;
-				if (vc.getVersion() > version_apk) {
-					System.out.println("lw      服务器有更新！");
-					// 显示提示对话框
-					showNoticeDialog();
-				}
-			} else {
-			}*/
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -312,47 +293,5 @@ public class UpdateManager {
 		mContext.startActivity(i);
 		android.os.Process.killProcess(android.os.Process.myPid());
 	}
-
-
-
-
-	public static boolean startApk(String packageName, String activityName) {
-		boolean isSuccess = false;
-
-		String cmd = "am start -n " + packageName + "/" + activityName + " \n";
-		try {
-			Process process = Runtime.getRuntime().exec(cmd);
-
-			isSuccess = waitForProcess(process);
-		} catch (IOException e) {
-			Log.i("lw  startApk", e.getMessage());
-			e.printStackTrace();
-		}
-		return isSuccess;
-	}
-
-	private static boolean waitForProcess(Process p) {
-		boolean isSuccess = false;
-		int returnCode;
-		try {
-			returnCode = p.waitFor();
-			switch (returnCode) {
-				case 0:
-					isSuccess = true;
-					break;
-
-				case 1:
-					break;
-
-				default:
-					break;
-			}
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-
-		return isSuccess;
-	}
-
 
 }
